@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FormWatch — Test every form like a real user would.</title>
+<meta name="description" content="Discover forms on a page, inspect fields and validation rules, run safe test submissions, and catch broken submit buttons before visitors do.">
+<meta name="keywords" content="form testing, website QA, form validation tester">
+<meta name="author" content="Sajidur">
+<meta property="og:title" content="FormWatch — Test every form like a real user would.">
+<meta property="og:description" content="Discover forms on a page, inspect fields and validation rules, run safe test submissions, and catch broken submit buttons before visitors do.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://alltoolfree.site">
+<meta name="twitter:card" content="summary">
+<meta name="robots" content="index, follow">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"FormWatch","applicationCategory":"DeveloperApplication","operatingSystem":"Web","author":{"@type":"Person","name":"Sajidur","url":"https://alltoolfree.site"},"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"license":"https://opensource.org/licenses/MIT"}</script>
+<style>
+:root{--primary:#7c3aed;--accent:#ede9fe;--bg:#f8fafc;--ink:#0f172a;--muted:#64748b;--line:#e2e8f0;--card:#fff}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55}
+header{background:var(--card);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;position:sticky;top:0;z-index:5}
+.logo{width:38px;height:38px;border-radius:10px;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px}
+header h1{font-size:19px;margin:0}header .tag{color:var(--muted);font-size:13px}
+header nav{margin-left:auto;display:flex;gap:12px;align-items:center;font-size:14px}
+header nav a{color:var(--ink);text-decoration:none}header nav a:hover{color:var(--primary)}
+main{max-width:1020px;margin:0 auto;padding:22px 16px 40px}
+.hero{background:var(--accent);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:18px}
+.hero h2{margin:0 0 6px;font-size:22px}.hero p{margin:0;color:#334155}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+@media(max-width:700px){.grid2,.grid3{grid-template-columns:1fr}}
+button{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 14px;cursor:pointer;font-size:14px}
+button.primary{background:var(--primary);color:#fff;border-color:var(--primary)}
+button:hover{filter:brightness(.96)}
+input,select,textarea{border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:14px;font-family:inherit;background:#fff}
+textarea{width:100%}input[type=file]{border:none;padding:4px 0}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+tr.bad td{background:#fef2f2}.muted{color:var(--muted);font-size:13px}.ok{color:#15803d;font-weight:600}.warn{color:#b45309;font-weight:600}
+.issue{border-left:4px solid #f59e0b;background:#fffbeb;padding:10px 12px;border-radius:8px;margin-bottom:8px}
+.issue.error{border-color:#dc2626;background:#fef2f2}.issue.info{border-color:#64748b;background:#f8fafc}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:12px 0}
+.stats>div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;text-align:center}
+.stats b{display:block;font-size:22px}.stats span{font-size:12px;color:var(--muted)}
+.shot{max-width:100%;border:1px solid var(--line);border-radius:8px}
+canvas.shot{width:100%;height:auto}
+pre{background:#0f172a;color:#e2e8f0;padding:12px;border-radius:8px;overflow:auto;font-size:12.5px;white-space:pre-wrap}
+code{background:#f1f5f9;padding:1px 5px;border-radius:5px;font-size:13px}
+.imgWrap{position:relative;display:inline-block;max-width:100%}.imgWrap img{max-width:100%;border-radius:8px;display:block}
+.pin{position:absolute;width:22px;height:22px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;transform:translate(-50%,-50%);cursor:pointer}
+.traceRow{display:flex;gap:8px;align-items:center;margin:4px 0;font-size:13px}.tName{min-width:150px}.tBar{height:10px;border-radius:5px;display:inline-block}
+footer{border-top:1px solid var(--line);background:var(--card);padding:20px;text-align:center;font-size:14px;color:var(--muted)}
+footer a{color:var(--primary);text-decoration:none;margin:0 6px}footer a:hover{text-decoration:underline}
+body.client-view .admin-only{display:none}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#0f172a;color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;display:none;z-index:50}
+dialog{border:1px solid var(--line);border-radius:12px;padding:20px;max-width:420px}
+</style>
+</head>
+<body class="lab">
+<header>
+<div class="logo">F</div>
+<div><h1>FormWatch</h1><div class="tag">Test every form like a real user would. · v1.0.0</div></div>
+<nav><a href="#app">App</a><a href="#how">How it works</a><button id="aboutBtn">About</button></nav>
+</header>
+<main id="app">
+<div class="hero"><h2>Test every form like a real user would.</h2><p>Discover forms on a page, inspect fields and validation rules, run safe test submissions, and catch broken submit buttons before visitors do.</p></div>
+<div class="panel"><label>Page URL <input type="url" id="pageUrl" placeholder="https://example.com/contact" style="width:60%"></label> <button id="fetchBtn" class="primary">Discover forms</button></div>
+<div class="panel"><h3>Or paste page HTML</h3><textarea id="htmlPaste" rows="4" placeholder="Paste the page HTML here…"></textarea><br><button id="pasteBtn">Analyse pasted HTML</button></div>
+<div id="formsOut"></div>
+<div class="panel"><h3>Test history</h3><table><thead><tr><th>When</th><th>Form</th><th>Issues</th><th>Source</th></tr></thead><tbody id="runs"></tbody></table></div>
+<div class="panel" id="how"><h3>How it works</h3><p>Enter a page URL (CORS-enabled sites) or paste its HTML. FormWatch lists every form and field, flags missing names/buttons, and runs a validation test per form.</p><p class="muted">Data is stored only in your browser (localStorage) unless a feature explicitly fetches a URL or API you enter. Run <code>npm start</code> for the real server — live checks run server-side and history is saved on disk. Opening <code>index.html</code> directly still works in browser-only mode.</p></div>
+</main>
+<footer>
+<p><strong>FormWatch v1.0.0</strong> · Created by <a href="https://alltoolfree.site" target="_blank" rel="noopener">Sajidur</a> · Open Source (MIT)</p>
+<p><a href="https://alltoolfree.site" target="_blank" rel="noopener">AllToolFree ↗</a> <a href="https://alltoolfree.site" target="_blank" rel="noopener">More free tools ↗</a> <a href="https://github.com/sajidurop/formwatch" target="_blank" rel="noopener">View source on GitHub ↗</a> <a href="https://alltoolfree.site" target="_blank" rel="noopener">Discover AllToolFree ↗</a></p>
+<p class="muted">Self-hostable. Works offline except for features that fetch a URL or API you supply.</p>
+</footer>
+<dialog id="aboutDlg"><h3>About FormWatch</h3><p>Discover forms on a page, inspect fields and validation rules, run safe test submissions, and catch broken submit buttons before visitors do.</p><p>Created by <a href="https://alltoolfree.site" target="_blank" rel="noopener">Sajidur</a></p><p><a href="https://alltoolfree.site" target="_blank" rel="noopener">Discover AllToolFree ↗</a> — more free tools by the same creator.</p><p class="muted">MIT License. Version 1.0.0.</p><button id="closeDlg">Close</button></dialog>
+<div id="toast"></div>
+<script>
+const BRAND={creator:"Sajidur",website:"https://alltoolfree.site",repository:"https://github.com/sajidurop/formwatch",product:"FormWatch",version:"1.0.0"};
+const $=s=>document.querySelector(s);const $$=s=>[...document.querySelectorAll(s)];
+function save(k,v){try{localStorage.setItem("formwatch:"+k,JSON.stringify(v))}catch(e){}}
+function load(k,d){try{const v=JSON.parse(localStorage.getItem("formwatch:"+k));return v==null?d:v}catch(e){return d}}
+function download(name,text,type){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([text],{type:type||"application/json"}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000)}
+function toast(m){const t=$("#toast");t.textContent=m;t.style.display="block";setTimeout(()=>t.style.display="none",2600)}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+document.getElementById("aboutBtn").onclick=()=>document.getElementById("aboutDlg").showModal();
+document.getElementById("closeDlg").onclick=()=>document.getElementById("aboutDlg").close();
+
+function analyse(html,src){
+ const doc=new DOMParser().parseFromString(html,'text/html');
+ const forms=[...doc.querySelectorAll('form')];
+ if(!forms.length){$('#formsOut').innerHTML='<p>No &lt;form&gt; elements found in this page.</p>';return}
+ $('#formsOut').innerHTML=forms.map((f,i)=>{
+  const fields=[...f.querySelectorAll('input,select,textarea')].map(el=>`<li><b>${esc(el.tagName.toLowerCase())}</b> name="${esc(el.name||'(none)')}" type="${esc(el.type||'')}" ${el.required?'required':''} ${el.pattern?'pattern="'+esc(el.pattern)+'"':''}</li>`).join('');
+  const btn=f.querySelector('button[type=submit],input[type=submit]');
+  return `<div class="panel"><h3>Form ${i+1} — action: ${esc(f.action||'(none)')} · method: ${esc((f.method||'get').toUpperCase())}</h3><ul>${fields||'<li>No fields</li>'}</ul><p>Submit button: <b>${btn?'FOUND — '+(btn.textContent||btn.value||'submit').trim():'MISSING — form cannot be submitted'}</b></p><button data-i="${i}" class="runTest">Run validation test</button><div class="testOut" id="test-${i}"></div></div>`;
+ }).join('');
+ $$('.runTest').forEach(b=>b.onclick=()=>{
+  const f=forms[+b.dataset.i];const issues=[];
+  [...f.querySelectorAll('input,select,textarea')].forEach(el=>{
+   if(el.required&&!el.name)issues.push('Required field has no name — its value will not be sent.');
+   if(el.type==='email'&&el.required)issues.push('Email field "'+(el.name||'?')+'" — test value "test@example.com" passes format check.');
+   if(el.type==='email'&&!el.pattern)issues.push('Email field "'+(el.name||'?')+'" relies on browser validation only.');
+  });
+  const btn=f.querySelector('button[type=submit],input[type=submit]');
+  if(!btn)issues.push('CRITICAL: no submit button found.');
+  if(!f.action)issues.push('No action URL — form submits to the same page.');
+  const out=$('#test-'+b.dataset.i);
+  out.innerHTML=issues.length?'<ul>'+issues.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>':'<p><b>PASS</b> — fields named, submit button present, action set.</p>';
+  const h=load('runs',[]);h.unshift({at:new Date().toISOString(),form:+b.dataset.i+1,issues:issues.length,source:src});save('runs',h.slice(0,30));renderRuns();
+ });
+}
+$('#fetchBtn').onclick=async()=>{const u=$('#pageUrl').value.trim();if(!u){toast('Enter a URL');return}try{const r=await fetch(u);analyse(await r.text(),u)}catch(e){toast('Fetch blocked by CORS — paste the page HTML below instead.')}};
+$('#pasteBtn').onclick=()=>{const h=$('#htmlPaste').value;if(!h){toast('Paste HTML first');return}analyse(h,'pasted-html')};
+function renderRuns(){const h=load('runs',[]);$('#runs').innerHTML=h.length?h.map(r=>`<tr><td>${esc(r.at.slice(0,19).replace('T',' '))}</td><td>Form ${r.form}</td><td>${r.issues} issue(s)</td><td>${esc(r.source)}</td></tr>`).join(''):'<tr><td colspan="4">No test runs yet.</td></tr>'}
+renderRuns();
+
+
+/* __REAL_SERVER_WIRING__ */
+async function __api(path, body){
+  try{
+    const r = await fetch(path, {method: body ? 'POST' : 'GET', headers: {'Content-Type':'application/json'}, body: body ? JSON.stringify(body) : undefined});
+    if(!r.ok) return null;
+    return await r.json();
+  }catch(e){ return null; }
+}
+let __serverUp = false;
+__api('/api/health').then(h => {
+  if(h && h.ok){
+    __serverUp = true;
+    const nav = document.querySelector('header nav');
+    if(nav){ const s=document.createElement('span'); s.textContent='● Live server'; s.style.cssText='color:#15803d;font-weight:600;font-size:13px'; nav.prepend(s); }
+  }
+});
+function __on(btnId, fn){
+  document.addEventListener('click', async (e) => {
+    const t = e.target && e.target.closest ? e.target.closest('#'+btnId) : null;
+    if(t && __serverUp){ e.stopPropagation(); e.preventDefault(); await fn(); }
+  }, true);
+}
+function __v(id){ const el=document.getElementById(id); return el ? el.value : ''; }
+
+__on('fetchBtn', async ()=>{
+  const out=await __api('/api/check',{url:__v('pageUrl')});
+  const box=document.getElementById('formsOut'); if(!box) return;
+  if(!out || out.error){ box.innerHTML='<div class="issue error">'+esc(out?out.error:'Server check failed')+'</div>'; return; }
+  box.innerHTML=out.forms.map(f=>'<div class="panel"><h3>Form '+(f.index+1)+' — '+esc(f.method)+' '+esc(f.action)+'</h3><p>'+f.inputs.length+' fields · '+f.issues.length+' issues</p>'+f.issues.map(i=>'<div class="issue">'+esc(i)+'</div>').join('')+'<table><thead><tr><th>Field</th><th>Type</th><th>Required</th><th>Label</th></tr></thead><tbody>'+f.inputs.map(x=>'<tr><td>'+esc(x.name)+'</td><td>'+esc(x.type)+'</td><td>'+(x.required?'yes':'no')+'</td><td>'+(x.hasLabel?'yes':'NO')+'</td></tr>').join('')+'</tbody></table></div>').join('') || '<p class="muted">No forms found on this page.</p>';
+});
+
+</script>
+</body>
+</html>
